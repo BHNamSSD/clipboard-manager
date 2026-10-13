@@ -197,6 +197,11 @@ public class ClipboardUI extends JFrame {
 
         tabs.addTab("Clipboard", clipboardPanel);
 
+        tabs.addTab(
+                "Terminal Monitor",
+                new TerminalCommandPanel()
+        );
+
         try {
             keyboardPanel = new KeyboardLabPanel();
             tabs.addTab("Keyboard Events", keyboardPanel);
