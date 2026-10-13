@@ -1,5 +1,11 @@
 package com.bhnam;
 
+import com.bhnam.JsonEventLogger;
+import com.bhnam.KeyboardLabFrame;
+import com.bhnam.KeyboardLabPanel;
+
+import java.io.IOException;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -21,6 +27,7 @@ public class ClipboardUI extends JFrame {
     private final DefaultTableModel tableModel;
     private final JTable table;
     private final JTextField searchField;
+    private final KeyboardLabPanel keyboardPanel;
 
     public ClipboardUI() {
 
@@ -169,24 +176,72 @@ public class ClipboardUI extends JFrame {
         // MAIN LAYOUT
         // =====================================================
 
-        setLayout(
-                new BorderLayout()
-        );
+        JPanel clipboardPanel = new JPanel(new BorderLayout());
 
-        add(
+        clipboardPanel.add(
                 topPanel,
                 BorderLayout.NORTH
         );
 
-        add(
+        clipboardPanel.add(
                 scrollPane,
                 BorderLayout.CENTER
         );
 
-        add(
+        clipboardPanel.add(
                 bottomPanel,
                 BorderLayout.SOUTH
         );
+
+        JTabbedPane tabs = new JTabbedPane();
+
+        tabs.addTab("Clipboard", clipboardPanel);
+
+        try {
+            keyboardPanel = new KeyboardLabPanel();
+            tabs.addTab("Keyboard Events", keyboardPanel);
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException(
+                    "Cannot initialize keyboard event logger",
+                    ex
+            );
+        }
+
+        setLayout(new BorderLayout());
+        add(tabs, BorderLayout.CENTER);
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(
+                    java.awt.event.WindowEvent e) {
+                try {
+                    keyboardPanel.close();
+                } catch (java.io.IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+
+//old
+//        setLayout(
+//                new BorderLayout()
+//        );
+//
+//        add(
+//                topPanel,
+//                BorderLayout.NORTH
+//        );
+//
+//        add(
+//                scrollPane,
+//                BorderLayout.CENTER
+//        );
+//
+//        add(
+//                bottomPanel,
+//                BorderLayout.SOUTH
+//        );
 
         // =====================================================
         // SEARCH

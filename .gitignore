@@ -4,6 +4,7 @@ target/
 # Java build
 out/
 dist/
+logs/
 *.class
 *.jar
 
